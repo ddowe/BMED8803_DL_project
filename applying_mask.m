@@ -1,9 +1,12 @@
 % Parent directory containing all runs
 parent_dir = 'C:\Users\sdabiri\OneDrive - Georgia Institute of Technology\BMED 8803 - Stat ML for Neural data\Project\preprocessed\s05';
 
+% Directory containing the left and right EC masks
+mask_dir = 'C:\Users\sdabiri\OneDrive - Georgia Institute of Technology\BMED 8803 - Stat ML for Neural data\Project\Small_Dataset\s05';
+
 % File names for the left and right EC masks
-left_mask = 'LEC.nii';
-right_mask = 'REC.nii';
+left_mask = fullfile(mask_dir, 'LEC.nii');
+right_mask = fullfile(mask_dir, 'REC.nii');
 
 % Load the left and right EC masks
 left_mask_vol = spm_vol(left_mask);
