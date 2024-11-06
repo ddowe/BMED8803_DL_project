@@ -1,3 +1,5 @@
+clear;
+
 % Parent directory containing all runs
 parent_dir = 'C:\Users\sdabiri\OneDrive - Georgia Institute of Technology\BMED 8803 - Stat ML for Neural data\Project\preprocessed\s05';
 
@@ -5,8 +7,8 @@ parent_dir = 'C:\Users\sdabiri\OneDrive - Georgia Institute of Technology\BMED 8
 mask_dir = 'C:\Users\sdabiri\OneDrive - Georgia Institute of Technology\BMED 8803 - Stat ML for Neural data\Project\Small_Dataset\s05';
 
 % File names for the left and right EC masks
-left_mask = fullfile(mask_dir, 'LEC.nii');
-right_mask = fullfile(mask_dir, 'REC.nii');
+left_mask = fullfile(mask_dir, 'r_LEC.nii');
+right_mask = fullfile(mask_dir, 'r_REC.nii');
 
 % Load the left and right EC masks
 left_mask_vol = spm_vol(left_mask);
@@ -35,7 +37,8 @@ flags = struct('mean', false, 'which', 1, 'interp', 0);
 spm_reslice({sample_smooth_vol.fname, combined_mask_vol.fname}, flags);
 
 % Load the resliced mask for use in all subsequent masking operations
-resliced_mask_data = spm_read_vols(spm_vol(combined_mask_vol.fname));
+resliced_mask_file = fullfile(mask_dir, 'combined_mask.nii');
+resliced_mask_data = spm_read_vols(spm_vol(resliced_mask_file));
 
 % Get a list of all run subdirectories
 run_dirs = dir(fullfile(parent_dir, 'run*'));
@@ -80,9 +83,6 @@ for i = 1:length(run_dirs)
         else
             error('Dimension mismatch: Smoothed image and resliced mask have incompatible sizes.');
         end
-
-        % Apply the resliced mask to the smoothed image
-        masked_data = smoothed_data .* resliced_mask_data;
         
         % Save the masked image
         [~, filename, ext] = fileparts(smoothed_files{j});
@@ -100,5 +100,3 @@ end
 delete(combined_mask_vol.fname);
 
 disp('All runs processed. Check each run folder for the masked_outputs directory.');
-
-
